@@ -1,3 +1,7 @@
+0.9.3
+==========
+* fixed issues with config.json or .config/feednix not existing
+
 0.9.2
 ==========
 * added unicode supprot (I think)
