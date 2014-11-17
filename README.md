@@ -22,6 +22,10 @@ Thank you @chrisjohnston for mentioning the following dependencies for Ubuntu:
 
 `sudo apt-get install dh-autoreconf libjsoncpp-dev libcurl4-gnutls-dev libncurses5-dev`
 
+Thank you @bandb42 for mentioning the following dependencies for Fedora:
+
+`sudo yum install dh-autoreconf ncurses-devel jsoncpp-devel libcurl-devel`
+
 ## Clarification on Sign In Method (PLEASE READ)
 
 Due to the fact that this is open source, the administrators at Feedly have
