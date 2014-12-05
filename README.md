@@ -61,7 +61,7 @@ to keep this project open source, hence this new method.
 
 ### Category List Options
 
-* Enter : Fetch Stream (Retrive post by category)
+* Enter : Fetch Stream (Retrieve post by category)
 * A : Mark category read
 * R : Refersh highlighted category (Retrive post by category)
 
