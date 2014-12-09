@@ -47,6 +47,7 @@ to keep this project open source, hence this new method.
 
 * q : Exit
 * Vim Key mappings for navigation (j,k)
+* Tab : Switch between Posts and Categories Pane
 
 ### Post List Options
 
