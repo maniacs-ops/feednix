@@ -47,6 +47,7 @@ to keep this project open source, hence this new method.
 
 * q : Exit
 * Vim Key mappings for navigation (j,k)
+* Tab : Switch between Posts and Categories Pane
 
 ### Post List Options
 
@@ -61,7 +62,7 @@ to keep this project open source, hence this new method.
 
 ### Category List Options
 
-* Enter : Fetch Stream (Retrive post by category)
+* Enter : Fetch Stream (Retrieve post by category)
 * A : Mark category read
 * R : Refersh highlighted category (Retrive post by category)
 
