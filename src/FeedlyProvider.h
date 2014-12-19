@@ -46,6 +46,7 @@ class FeedlyProvider{
                 void setChangeTokensFlag(bool value);
                 void curl_cleanup();
         private:
+                long response_code = 0;
                 CURL *curl;
                 CURLcode curl_res;
                 std::ofstream log_stream;
@@ -59,7 +60,6 @@ class FeedlyProvider{
                 void enableVerbose();
                 void curl_retrive(const std::string&);
                 void extract_galx_value();
-                void echo(bool on);
                 void openLogStream();
 };
 

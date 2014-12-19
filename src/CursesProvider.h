@@ -21,8 +21,8 @@ class CursesProvider{
                 FeedlyProvider feedly;
                 WINDOW *ctgWin, *postsWin, *viewWin;
                 PANEL  *panels[3], *top;
-                ITEM **ctgItems, **postsItems;
-                MENU *ctgMenu, *postsMenu;
+                ITEM **ctgItems = NULL, **postsItems = NULL;
+                MENU *ctgMenu = NULL, *postsMenu = NULL;
                 std::string lastEntryRead, statusLine[3];
                 bool currentRank = 0;
                 int totalPosts = 0, numRead = 0, numUnread = 0;

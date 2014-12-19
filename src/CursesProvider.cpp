@@ -115,6 +115,13 @@ void CursesProvider::control(){
         while((ch = getch()) != KEY_F(1) && ch != 'q'){
                 curItem = current_item(curMenu);
                 switch(ch){
+                        case KEY_RESIZE:
+                                endwin();
+                                clear();
+                                refresh();
+                                doupdate();
+                                update_panels();
+                                break;
                         case 10:
                                 if(curMenu == ctgMenu){
                                         top = (PANEL *)panel_userptr(top);

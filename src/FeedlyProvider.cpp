@@ -63,13 +63,20 @@ void FeedlyProvider::authenticateUser(){
                 root["developer_token"] = devToken;
                 root["userID"] = userID;
 
+                user_data.authToken = (root["developer_token"]).asString();
+                user_data.id = (root["userID"]).asString(); 
+
+                curl_retrive("profile");
+
                 Json::StyledWriter writer;
 
                 std::ofstream newConfig(configPath.c_str());
                 newConfig << root;
 
                 newConfig.close();
+
         }
+
         initialConfig.close();
 
         user_data.authToken = (root["developer_token"]).asString();
@@ -460,6 +467,17 @@ void FeedlyProvider::curl_retrive(const std::string& uri){
         enableVerbose();
 
         curl_res = curl_easy_perform(curl);
+        curl_easy_getinfo(curl, CURLINFO_RESPONSE_CODE, &response_code);
+        if(response_code == 400 || response_code == 401){
+                if(response_code == 401)
+                        std::cerr << "ERROR: Invalid Token/ID" << std::endl;
+                if(!isLogStreamOpen) openLogStream();
+                log_stream << "ERROR: Curl Request Failed\n HTTP Response Code: " << response_code << std::endl;
+                if(curl_res != CURLE_OK)
+                        log_stream << "curl_easy_perform() failed : " << curl_easy_strerror(curl_res) << std::endl;
+                exit(EXIT_FAILURE);
+        }
+
 
         fclose(data_holder);
         curl_easy_cleanup(curl);
@@ -477,16 +495,8 @@ void FeedlyProvider::openLogStream(){
                 isLogStreamOpen = true;
         }
 }
-void FeedlyProvider::echo(bool on = true){
-        struct termios settings;
-        tcgetattr( STDIN_FILENO, &settings );
-        settings.c_lflag = on
-                ? (settings.c_lflag |   ECHO )
-                : (settings.c_lflag & ~(ECHO));
-        tcsetattr( STDIN_FILENO, TCSANOW, &settings );
-}
 void FeedlyProvider::curl_cleanup(){
         curl_global_cleanup();
-        if(log_stream.is_open())
+        if(log_stream != NULL && log_stream.is_open())
                 log_stream.close();
 }
