@@ -1,3 +1,15 @@
+0.9.4.5
+==========
+* Fixed bug pertaining to marking posts read when none exists
+* Fixed seg fault on marking all posts read
+* Misc technical and bug fixes
+
+0.9.4
+==========
+* Fixed clean up at abort seg fault
+* Added check for token and id correctness
+* Fixed issues with flags
+
 0.9.3
 ==========
 * fixed issues with config.json or .config/feednix not existing

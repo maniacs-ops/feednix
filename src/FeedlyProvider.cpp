@@ -163,6 +163,9 @@ const std::vector<PostData>* FeedlyProvider::giveStreamPosts(const std::string& 
 
 }
 bool FeedlyProvider::markPostsRead(const std::vector<std::string>* ids){
+        if(ids->size() == 0)
+                return false;
+
         FILE* data_holder = fopen(TEMP_PATH.c_str(), "wb");
 
         Json::Value jsonCont;

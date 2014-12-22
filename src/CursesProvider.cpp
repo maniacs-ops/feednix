@@ -211,7 +211,8 @@ void CursesProvider::control(){
                                          break;
                                  }
                         case 'r':{
-                                         markItemRead(curItem);
+                                         if(postsMenu != NULL && curItem != NULL && postsItems != NULL)
+                                             markItemRead(curItem);
                                          break;
                                  }
                         case 's':{
@@ -309,11 +310,12 @@ void CursesProvider::control(){
                                          refresh();
 
                                          feedly.markCategoriesRead(item_description(current_item(ctgMenu)), lastEntryRead);
-                                         update_statusline("", NULL, true);
 
                                          ctgMenuCallback(strdup(item_name(curItem)));
                                          currentCategoryRead = true;
                                          curMenu = ctgMenu;
+
+                                         update_statusline("", NULL, true);
                                          break;
                                  }
                 }
@@ -524,7 +526,7 @@ void CursesProvider::postsMenuCallback(ITEM* item, bool preview){
         system(std::string("rm " + TMPDIR + "/preview.html 2> /dev/null").c_str());
 }
 void CursesProvider::markItemRead(ITEM* item){
-        if(item_opts(item)){
+        if(item_opts(item) && item != NULL){
                 item_opts_off(item, O_SELECTABLE);
                 update_statusline("[Marking post read]", NULL, true);
                 refresh();
