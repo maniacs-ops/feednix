@@ -1,4 +1,4 @@
-0.9.4.5
+0.9.4.1
 ==========
 * Fixed bug pertaining to marking posts read when none exists
 * Fixed seg fault on marking all posts read
