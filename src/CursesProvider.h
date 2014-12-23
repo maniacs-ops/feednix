@@ -25,6 +25,7 @@ class CursesProvider{
                 MENU *ctgMenu = NULL, *postsMenu = NULL;
                 std::string lastEntryRead, statusLine[3];
                 bool currentRank = 0;
+                bool activatePreview = 1;
                 int totalPosts = 0, numRead = 0, numUnread = 0;
                 int viewWinHeightPer = VIEW_WIN_HEIGHT_PER, viewWinHeight = 0, ctgWinWidth = CTG_WIN_WIDTH;
                 bool currentCategoryRead;

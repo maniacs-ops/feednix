@@ -64,6 +64,8 @@ void CursesProvider::init(){
                 viewWinHeightPer = root["view_win_height_per"].asInt();
 
                 currentRank = root["rank"].asBool();
+                if(root.isMember("preview_active"))
+                        activatePreview = root["preview_active"].asBool();
         }
         else{
                 endwin();
@@ -72,21 +74,26 @@ void CursesProvider::init(){
                 exit(EXIT_FAILURE);
         }
 
-        if (ctgWinWidth == 0)
-                ctgWinWidth = CTG_WIN_WIDTH;
-        if (viewWinHeight == 0 && viewWinHeightPer == 0)
-                viewWinHeightPer = VIEW_WIN_HEIGHT_PER;
-        if (viewWinHeight == 0)
-                viewWinHeight = (unsigned int)(((LINES - 2) * viewWinHeightPer) / 100);
+        if(activatePreview){
+                if (ctgWinWidth == 0)
+                        ctgWinWidth = CTG_WIN_WIDTH;
+                if (viewWinHeight == 0 && viewWinHeightPer == 0)
+                        viewWinHeightPer = VIEW_WIN_HEIGHT_PER;
+                if (viewWinHeight == 0)
+                        viewWinHeight = (unsigned int)(((LINES - 2) * viewWinHeightPer) / 100);
+        }
+        else{
+               viewWinHeight = 0;
+        }
 
         createCategoriesMenu();
         createPostsMenu();
 
-        viewWin = newwin(viewWinHeight, COLS - 2, (LINES - 2 - viewWinHeight), 1);
+        if(activatePreview) viewWin = newwin(viewWinHeight, COLS - 2, (LINES - 2 - viewWinHeight), 1);
 
         panels[0] = new_panel(ctgWin);
         panels[1] = new_panel(postsWin);
-        panels[2] = new_panel(viewWin);
+        if(activatePreview) panels[2] = new_panel(viewWin);
 
         set_panel_userptr(panels[0], panels[1]);
         set_panel_userptr(panels[1], panels[0]);
@@ -170,7 +177,7 @@ void CursesProvider::control(){
                                 top_panel(top);
                                 break;
                         case '=':
-                                wclear(viewWin);
+                                if(activatePreview) wclear(viewWin);
                                 update_statusline("[Updating stream]", "", false);
                                 refresh();
 
@@ -240,7 +247,7 @@ void CursesProvider::control(){
                                          break;
                                  }
                         case 'R':
-                                 wclear(viewWin);
+                                 if(activatePreview) wclear(viewWin);
                                  update_statusline("[Updating stream]", "", false);
                                  refresh();
 
@@ -305,7 +312,7 @@ void CursesProvider::control(){
                                          break;
                                  }
                         case 'A':{
-                                         wclear(viewWin);
+                                         if(activatePreview) wclear(viewWin);
                                          update_statusline("[Marking category read]", "", true);
                                          refresh();
 
@@ -472,29 +479,32 @@ void CursesProvider::changeSelectedItem(MENU* curMenu, int req){
 
         if(curMenu != postsMenu ||  !curItem) return;
 
-        PostData* data = feedly.getSinglePostData(item_index(curItem));
-        std::string PREVIEW_PATH = TMPDIR + "/preview.html";
-        std::ofstream myfile (PREVIEW_PATH.c_str());
+        if(activatePreview){
+                PostData* data = feedly.getSinglePostData(item_index(curItem));
+                std::string PREVIEW_PATH = TMPDIR + "/preview.html";
+                std::ofstream myfile (PREVIEW_PATH.c_str());
+       
 
-        if (myfile.is_open())
-                myfile << data->content;
+                if (myfile.is_open())
+                        myfile << data->content;
 
-        myfile.close();
+                myfile.close();
 
-        FILE* stream = popen(std::string("w3m -dump -cols " + std::to_string(COLS - 2) + " " + PREVIEW_PATH).c_str(), "r");
+                FILE* stream = popen(std::string("w3m -dump -cols " + std::to_string(COLS - 2) + " " + PREVIEW_PATH).c_str(), "r");
 
-        std::string content;
-        char buffer[256];
+                std::string content;
+                char buffer[256];
 
-        if (stream) {
-                while (!feof(stream))
-                        if (fgets(buffer, 256, stream) != NULL) content.append(buffer);
-                pclose(stream);
+                if (stream) {
+                        while (!feof(stream))
+                                if (fgets(buffer, 256, stream) != NULL) content.append(buffer);
+                        pclose(stream);
+                }
+
+                wclear(viewWin);
+                mvwprintw(viewWin, 1, 1, "%s", content.c_str());
+                update_statusline(NULL, std::string(data->originTitle + " - " + data->title).c_str(), true);
         }
-
-        wclear(viewWin);
-        mvwprintw(viewWin, 1, 1, "%s", content.c_str());
-        update_statusline(NULL, std::string(data->originTitle + " - " + data->title).c_str(), true);
         update_panels();
         markItemRead(curItem);
 }
