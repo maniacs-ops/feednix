@@ -4,6 +4,14 @@ Feednix
 
 An ncurses based client for [Feedly](http://feedly.com/).
 
+## Features
+
+* Vim-like bindings for scrolling through posts
+* Quick preview as you look at posts
+* Able to open post link with w3m or your default browser
+* Configurable colors
+* Also includes an external log for debugging
+
 ## Install
 
 ### Distribution Packages
