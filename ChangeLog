@@ -1,3 +1,8 @@
+0.9.5
+==========
+* Added new config option : toggle preview panel
+* Misc bug fixes
+
 0.9.4.1
 ==========
 * Fixed bug pertaining to marking posts read when none exists
