@@ -65,7 +65,7 @@ void CursesProvider::init(){
 
                 currentRank = root["rank"].asBool();
                 if(root.isMember("preview_active"))
-                        activatePreview = root["preview_active"].asBool();
+                        activatePreview = access("/usr/bin/w3m", X_OK) ? false : root["preview_active"].asBool();
         }
         else{
                 endwin();
@@ -150,8 +150,6 @@ void CursesProvider::control(){
                                                 update_infoline(POSTS_STATUSLINE);
                                         }
                                 }
-                                else if(panel_window(top) == postsWin)
-                                        postsMenuCallback(curItem, true);
                                 break;
                         case 9:
                                 if(curMenu == ctgMenu){
@@ -509,28 +507,14 @@ void CursesProvider::changeSelectedItem(MENU* curMenu, int req){
         markItemRead(curItem);
 }
 void CursesProvider::postsMenuCallback(ITEM* item, bool preview){
+        if(access("/usr/bin/w3m", X_OK) != 0) return;
         PostData* container = feedly.getSinglePostData(item_index(item));
 
-        if(preview){
-                std::string PREVIEW_PATH = TMPDIR + "/preview.html";
-                std::ofstream myfile (PREVIEW_PATH.c_str());
+        def_prog_mode();
+        endwin();
+        system(std::string("w3m \'" + container->originURL + "\'").c_str());
+        reset_prog_mode();
 
-                if (myfile.is_open())
-                        myfile << container->content;
-
-                myfile.close();
-
-                def_prog_mode();
-                endwin();
-                system(std::string("w3m " + PREVIEW_PATH).c_str());
-                reset_prog_mode();
-        }
-        else{
-                def_prog_mode();
-                endwin();
-                system(std::string("w3m \'" + container->originURL + "\'").c_str());
-                reset_prog_mode();
-        }
         markItemRead(item);
         lastEntryRead = item_description(item);
         system(std::string("rm " + TMPDIR + "/preview.html 2> /dev/null").c_str());
