@@ -1,3 +1,8 @@
+0.9.5.1
+==========
+* Redefined links for jsoncpp after update
+* Patch for some problems with Mac OS X and C++11
+
 0.9.5
 ==========
 * Added new config option : toggle preview panel

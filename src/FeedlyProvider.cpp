@@ -1,8 +1,8 @@
 #include <algorithm>
 #include <stdio.h>
 #include <stdlib.h>
-#include <jsoncpp/json/json.h>
-#include <jsoncpp/json/writer.h>
+#include <json/json.h>
+#include <json/writer.h>
 #include <iterator>
 #include <istream>
 #include <termios.h>
@@ -93,7 +93,7 @@ const std::map<std::string, std::string>* FeedlyProvider::getLabels(){
         std::ifstream data(TEMP_PATH.c_str(), std::ifstream::binary);
         parsingSuccesful = reader.parse(data, root);
 
-        if(data == NULL || curl_res != CURLE_OK || !parsingSuccesful){
+        if(data.fail() || curl_res != CURLE_OK || !parsingSuccesful){
                 if(!isLogStreamOpen) openLogStream();
                 log_stream << "ERROR: Failed to Retrive Categories" << std::endl;
                 if(!parsingSuccesful)
@@ -139,7 +139,7 @@ const std::vector<PostData>* FeedlyProvider::giveStreamPosts(const std::string& 
         parsingSuccesful = reader.parse(data, root);
 
 
-        if(data == NULL || curl_res != CURLE_OK || !parsingSuccesful){
+        if(data.fail()  || curl_res != CURLE_OK || !parsingSuccesful){
                 if(!isLogStreamOpen) openLogStream();
                 if(!parsingSuccesful)
                         log_stream << "\nERROR: Failed to parse tokens file" << reader.getFormatedErrorMessages() << std::endl;
