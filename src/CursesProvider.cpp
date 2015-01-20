@@ -415,7 +415,7 @@ void CursesProvider::createPostsMenu(){
         post_menu(postsMenu);
 
         if(posts == NULL)
-                print_in_center(postsWin, 3, 1, height, width-4, strdup("All Posts Read"), 1);
+                print_in_center(postsWin, 3, 1, height, width-4, "All Posts Read", COLOR_PAIR(0));
 }
 void CursesProvider::ctgMenuCallback(char* label){
         int startx, starty, height, width;
@@ -434,7 +434,7 @@ void CursesProvider::ctgMenuCallback(char* label){
                 set_menu_items(postsMenu, NULL);
                 post_menu(postsMenu);
 
-                print_in_center(postsWin, 3, 1, height, width-4, strdup("All Posts Read"), 1);
+                print_in_center(postsWin, 3, 1, height, width-4, "All Posts Read", COLOR_PAIR(0));
                 win_show(postsWin, strdup("Posts"), 2, false);
                 win_show(ctgWin, strdup("Categories"), 1, true);
 
@@ -567,7 +567,7 @@ void CursesProvider::win_show(WINDOW *win, char *label, int label_color, bool hi
         }
 
 }
-void CursesProvider::print_in_middle(WINDOW *win, int starty, int startx, int width, char *str, chtype color){
+void CursesProvider::print_in_middle(WINDOW *win, int starty, int startx, int width, const char *str, chtype color){
         int length, x, y;
         float temp;
 
@@ -586,7 +586,7 @@ void CursesProvider::print_in_middle(WINDOW *win, int starty, int startx, int wi
         x = startx + (int)temp;
         mvwprintw(win, y, x, "%s", str);
 }
-void CursesProvider::print_in_center(WINDOW *win, int starty, int startx, int height, int width, char *str, chtype color){
+void CursesProvider::print_in_center(WINDOW *win, int starty, int startx, int height, int width, const char *str, chtype color){
         int length, x, y;
         float tempX, tempY;
 
