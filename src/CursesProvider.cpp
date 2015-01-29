@@ -74,18 +74,7 @@ void CursesProvider::init(){
                 exit(EXIT_FAILURE);
         }
 
-        if(activatePreview){
-                if (ctgWinWidth == 0)
-                        ctgWinWidth = CTG_WIN_WIDTH;
-                if (viewWinHeight == 0 && viewWinHeightPer == 0)
-                        viewWinHeightPer = VIEW_WIN_HEIGHT_PER;
-                if (viewWinHeight == 0)
-                        viewWinHeight = (unsigned int)(((LINES - 2) * viewWinHeightPer) / 100);
-        }
-        else{
-               viewWinHeight = 0;
-        }
-
+        calculateDimensions();
         createCategoriesMenu();
         createPostsMenu();
 
@@ -122,13 +111,15 @@ void CursesProvider::control(){
                 curItem = current_item(curMenu);
                 switch(ch){
                         case KEY_RESIZE:
-                                /*win_show(postsWin, "Posts", 1, true);
+                                /*
                                 clear();
-                                refresh();
-                                update_panels();
-                                doupdate();
-                                break;*/
-                                std::cout << "" << std::endl;
+                                wclear(ctgWin);
+                                resizeWindows();
+                                redrawwin(ctgWin);
+                                //refresh();
+                                //update_panels();
+                                //doupdate();*/
+                                break;
                         case 10:
                                 if(activatePreview) wclear(viewWin);
                                 if(curMenu == ctgMenu){
@@ -332,7 +323,10 @@ void CursesProvider::control(){
 }
 void CursesProvider::createCategoriesMenu(){
         int n_choices, i = 3;
-        const std::map<std::string, std::string> *labels = feedly.getLabels();
+
+        const std::map<std::string, std::string> *temp = feedly.getLabels();
+        delete labels;
+        labels = temp;
 
         n_choices = labels->size() + 1;
         ctgItems = (ITEM **)calloc(sizeof(std::string::value_type)*n_choices, sizeof(ITEM *));
@@ -373,7 +367,9 @@ void CursesProvider::createPostsMenu(){
         int height, width;
         int n_choices, i = 0;
 
-        const std::vector<PostData> *posts = feedly.giveStreamPosts("All", currentRank);
+        const std::vector<PostData> *temp = feedly.giveStreamPosts("All", currentRank);
+        delete posts;
+        posts = temp;
 
         if(posts != NULL && posts->size() > 0){
                 totalPosts = posts->size();
@@ -659,6 +655,33 @@ void CursesProvider::update_infoline(const char* info){
         attron(COLOR_PAIR(5));
         mvprintw(LINES - 1, 0, info);
         attroff(COLOR_PAIR(5));
+}
+void CursesProvider::resizeWindows(){
+        calculateDimensions();
+        wresize(ctgWin, (LINES - 2 - viewWinHeight), ctgWinWidth);
+        wresize(postsWin, (LINES - 2 - viewWinHeight), 0);
+        if(activatePreview) wresize(viewWin, viewWinHeight, COLS - 2);
+
+        win_show(postsWin, strdup("Posts"), 1, true);
+        if(totalPosts == 0){ 
+                win_show(ctgWin, strdup("Categories"), 1, true);
+                win_show(postsWin, strdup("Posts"), 2, false);
+        }
+
+}
+void CursesProvider::calculateDimensions(){
+        if(activatePreview){
+                if (ctgWinWidth == 0)
+                        ctgWinWidth = CTG_WIN_WIDTH;
+                if (viewWinHeight == 0 && viewWinHeightPer == 0)
+                        viewWinHeightPer = VIEW_WIN_HEIGHT_PER;
+                if (viewWinHeight == 0)
+                        viewWinHeight = (unsigned int)(((LINES - 2) * viewWinHeightPer) / 100);
+        }
+        else{
+               viewWinHeight = 0;
+        }
+
 }
 void CursesProvider::cleanup(){
         if(ctgMenu != NULL){
