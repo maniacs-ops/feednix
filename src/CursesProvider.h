@@ -25,8 +25,6 @@ class CursesProvider{
                 MENU *ctgMenu = NULL, *postsMenu = NULL, *curMenu = NULL;
                 std::string lastEntryRead, statusLine[3];
                 bool currentRank = 0;
-                const std::vector<PostData> *posts = NULL;
-                const std::map<std::string, std::string> *labels;
                 bool activatePreview = 1;
                 int totalPosts = 0, numRead = 0, numUnread = 0;
                 int viewWinHeightPer = VIEW_WIN_HEIGHT_PER, viewWinHeight = 0, ctgWinWidth = CTG_WIN_WIDTH;
@@ -43,8 +41,6 @@ class CursesProvider{
                 void clear_statusline();
                 void update_statusline(const char* update, const char* post, bool showCounter);
                 void update_infoline(const char* info);
-                void calculateDimensions();
-                void resizeWindows();
 };
 
 #endif
