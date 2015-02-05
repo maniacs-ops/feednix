@@ -9,4 +9,4 @@ install:
 before_script:
             - ./autogen.sh
 script:
-            - ./configure && make -I /usr/include/jsoncpp
+            - ./configure && make
