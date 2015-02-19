@@ -523,6 +523,6 @@ void FeedlyProvider::openLogStream(){
 }
 void FeedlyProvider::curl_cleanup(){
         curl_global_cleanup();
-        if(log_stream != NULL && log_stream.is_open())
+        if(!log_stream.fail() && log_stream.is_open())
                 log_stream.close();
 }
