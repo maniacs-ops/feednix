@@ -2,11 +2,9 @@
 #include <curses.h>
 #include <menu.h>
 #include <panel.h>
-
-#ifndef _CURSES_H
-#define _CURSES_H
-
 #include "FeedlyProvider.h"
+
+#pragma once
 
 #define CTG_WIN_WIDTH 40
 #define VIEW_WIN_HEIGHT_PER 50
@@ -15,7 +13,7 @@ class CursesProvider{
         public:
                 CursesProvider(bool verbose, bool change);
                 void init();
-                void control();
+                void eventHandler();
                 void cleanup();
         private:
                 FeedlyProvider feedly;
@@ -34,6 +32,7 @@ class CursesProvider{
                 void changeSelectedItem(MENU* curMenu, int req);
                 void ctgMenuCallback(char* label);
                 void postsMenuCallback(ITEM* item, bool preview);
+                void newFeedDialog(void);
                 void markItemRead(ITEM* item);
                 void win_show(WINDOW *win, char *label, int label_color, bool highlight);
                 void print_in_middle(WINDOW *win, int starty, int startx, int width, const char *str, chtype color);
@@ -42,5 +41,3 @@ class CursesProvider{
                 void update_statusline(const char* update, const char* post, bool showCounter);
                 void update_infoline(const char* info);
 };
-
-#endif

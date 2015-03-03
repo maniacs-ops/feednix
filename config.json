@@ -31,5 +31,6 @@
                 // Newest(default) false 
                 // Oldest true 
    "rank" : false,
-   "preview_active" : true
+   "preview_active" : true,
+   "markReadWhileScrolling" : false
 }
