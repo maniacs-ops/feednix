@@ -42,7 +42,7 @@ class FeedlyProvider{
         const std::vector<PostData>* givePostsFromStream(const std::string& category, bool whichRank = 0);
         const std::map<std::string, std::string>* getLabels();
         const std::string getUserId();
-        const int getUnreadCount(const std::string& label);
+        int getUnreadCount(const std::string& label);
     private:
         UserData user_data;
         CURL *curl;

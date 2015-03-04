@@ -11,6 +11,7 @@
 #include <iterator>
 #include <algorithm>
 #include <string.h>
+#include <cstring>
 #include <termios.h>
 #include <unistd.h>
 #include <signal.h>
@@ -298,7 +299,10 @@ void CursesProvider::createCategoriesMenu(){
     // We know what the type of begin() iterator should be. Lets use C++11's auto specifier instead
     // to make the code more readable.
     for(auto it = labels->begin(); it != labels->end(); ++it){
-        ctgItems[i] = new_item((it->first).c_str(), std::to_string(feedly.getUnreadCount(it->first)).c_str());
+        std::string count = std::to_string(feedly.getUnreadCount(it->first));
+        char * cstr = new char [count.length()+1];
+        std::strcpy (cstr, count.c_str());
+        ctgItems[i] = new_item((it->first).c_str(), cstr);
         i++;
     }
 

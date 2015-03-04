@@ -136,7 +136,7 @@ const std::map<std::string, std::string>* FeedlyProvider::getLabels(){
 
     return &(user_data.categories);
 }
-const int FeedlyProvider::getUnreadCount(const std::string& label){
+int FeedlyProvider::getUnreadCount(const std::string& label){
     if(label == "Saved"){
         return 0;
     }
@@ -162,15 +162,17 @@ const int FeedlyProvider::getUnreadCount(const std::string& label){
         return -1;
     }
 
-    unsigned int totalCount = 0;
-    for(unsigned int i = 0; i < root["unreadcounts"].size(); i++){
-        totalCount += root["unreadcounts"][i]["count"].asUInt();
+    int totalCount = 0;
+    if(root.isMember("unreadcounts") && root["unreadcounts"].isArray()){
+        for(unsigned int i = 0; i < root["unreadcounts"].size()-1; i++){
+            totalCount += (int)root["unreadcounts"][i]["count"].asInt();
+                
+        }
     }
 
-
     return totalCount;
-    
-    
+
+
 }
 const std::vector<PostData>* FeedlyProvider::givePostsFromStream(const std::string& category, bool whichRank){
     feeds.clear();
@@ -246,7 +248,7 @@ bool FeedlyProvider::markPostWithAction(const std::string& action, const std::ve
     std::string document = writer.write(jsonCont);
 
     curl_post("markers", document);
-    
+
     if(curl_res != CURLE_OK){
         if(!isLogStreamOpen) openLogStream();
         log_stream << action << " action could not be processed." << std::endl;
