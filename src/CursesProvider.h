@@ -1,10 +1,13 @@
+#pragma once
+#ifndef _CURSES_H
+#define _CURSES_H
+
 #include <iostream>
 #include <curses.h>
 #include <menu.h>
 #include <panel.h>
 #include "FeedlyProvider.h"
 
-#pragma once
 
 #define CTG_WIN_WIDTH 40
 #define VIEW_WIN_HEIGHT_PER 50
@@ -44,3 +47,4 @@ class CursesProvider{
                 void update_statusline(const char* update, const char* post, bool showCounter);
                 void update_infoline(const char* info);
 };
+#endif
