@@ -116,11 +116,13 @@ const std::map<std::string, std::string>* FeedlyProvider::getLabels(){
     std::ifstream data(TEMP_PATH.c_str(), std::ifstream::binary);
     parsingSuccesful = reader.parse(data, root);
 
-    if(data.fail() || curl_res != CURLE_OK || !parsingSuccesful){
+    if(data.fail() || curl_res != CURLE_OK || !parsingSuccesful || !root.isArray()){
         if(!isLogStreamOpen) openLogStream();
         log_stream << "ERROR: Failed to Retrive Categories" << std::endl;
         if(!parsingSuccesful)
             log_stream << "\nERROR: Failed to parse tokens file" << reader.getFormatedErrorMessages() << std::endl;
+        else
+            log_stream << root << std::endl;
         if(curl_res != CURLE_OK)
             log_stream << "curl_easy_perform() failed : " << curl_easy_strerror(curl_res) << std::endl;
 
@@ -136,12 +138,12 @@ const std::map<std::string, std::string>* FeedlyProvider::getLabels(){
 
     return &(user_data.categories);
 }
-int FeedlyProvider::getUnreadCount(const std::string& label){
-    if(label == "Saved"){
-        return 0;
-    }
-    
-    curl_retrive("markers/counts?streamId=" + std::string(curl_easy_escape(curl, user_data.categories[label].c_str(), 0)));
+const std::map<std::string, unsigned int>* FeedlyProvider::getUnreadCount(){
+    // This is the best way I could think of making the count set the most efficient.
+    // A map with key value of stream ids is passed back to CursesProvider for quick
+    // look up.
+
+    curl_retrive("markers/counts");
 
     Json::Reader reader;
     Json::Value root;
@@ -153,26 +155,29 @@ int FeedlyProvider::getUnreadCount(const std::string& label){
 
     if(data.fail() || curl_res != CURLE_OK || !parsingSuccesful){
         if(!isLogStreamOpen) openLogStream();
-        log_stream << "ERROR: Failed to Retrive Categories" << std::endl;
+        log_stream << "ERROR: Failed to get Unread Count" << std::endl;
         if(!parsingSuccesful)
             log_stream << "\nERROR: Failed to parse tokens file" << reader.getFormatedErrorMessages() << std::endl;
         if(curl_res != CURLE_OK)
             log_stream << "curl_easy_perform() failed : " << curl_easy_strerror(curl_res) << std::endl;
 
-        return -1;
+        return NULL;
     }
 
-    int totalCount = 0;
+    std::map<std::string, unsigned int>* temp = new std::map<std::string, unsigned int>;
+
     if(root.isMember("unreadcounts") && root["unreadcounts"].isArray()){
-        for(unsigned int i = 0; i < root["unreadcounts"].size()-1; i++){
-            totalCount += (int)root["unreadcounts"][i]["count"].asInt();
+        for(unsigned int i = root["unreadcounts"].size() - user_data.categories.size() + 1; i < root["unreadcounts"].size(); i++){
+            (*temp)[root["unreadcounts"][i]["id"].asString()] = root["unreadcounts"][i]["count"].asUInt();
                 
         }
     }
 
-    return totalCount;
+    return temp;
 
-
+}
+const std::string FeedlyProvider::getStreamId(const std::string& label){
+    return user_data.categories[label];
 }
 const std::vector<PostData>* FeedlyProvider::givePostsFromStream(const std::string& category, bool whichRank){
     feeds.clear();
@@ -391,7 +396,7 @@ void FeedlyProvider::openLogStream(){
 }
 void FeedlyProvider::curl_cleanup(){
     curl_global_cleanup();
-    if(!log_stream.fail() && log_stream.is_open())
+    if(!log_stream && log_stream.is_open())
         log_stream.close();
 }
 PostData* FeedlyProvider::getSinglePostData(const int index){

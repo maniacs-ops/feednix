@@ -65,8 +65,12 @@ void CursesProvider::init(){
         viewWinHeightPer = root["view_win_height_per"].asInt();
 
         currentRank = root["rank"].asBool();
-        if(root.isMember("preview_active"))
+        if(root.isMember("previewActive"))
             activatePreview = access("/usr/bin/w3m", X_OK) ? false : root["preview_active"].asBool();
+        if(root.isMember("enablePersistentCount"))
+            activeCount = root["enablePersistentCount"].asBool();
+        if(root.isMember("markReadWhileScrolling"))
+            markReadWhileScroll = root["markReadWhileScrolling"].asBool();
     }
     else{
         endwin();
@@ -232,10 +236,11 @@ void CursesProvider::eventHandler(){
                          feedly.markPostWithAction("markAsSaved", temp);
                          update_statusline("", NULL, true);
 
+                         delete temp;
+
                          break;
                      }
             case 'S':{
-                         // Smae as above
                          std::vector<std::string> *temp = new std::vector<std::string>;
                          temp->push_back(item_description(curItem));
 
@@ -274,9 +279,9 @@ void CursesProvider::eventHandler(){
                          update_statusline("[Marking category read]", "", true);
                          refresh();
 
-                         feedly.markCategoriesRead(item_description(current_item(ctgMenu)), lastEntryRead);
+                         feedly.markCategoriesRead(feedly.getStreamId(item_name(current_item(ctgMenu))), lastEntryRead);
 
-                         ctgMenuCallback(strdup(item_name(curItem)));
+                         ctgMenuCallback(strdup(item_name(current_item(ctgMenu))));
                          currentCategoryRead = true;
                          curMenu = ctgMenu;
 
@@ -289,21 +294,23 @@ void CursesProvider::eventHandler(){
     }
 }
 void CursesProvider::createCategoriesMenu(){
-    int n_choices, i = 0;
+    int n_choices, i = 2;
     const std::map<std::string, std::string> *labels = feedly.getLabels();
 
     n_choices = labels->size() + 1;
     if( ctgItems == NULL )
         ctgItems = (ITEM **)calloc(sizeof(std::string::value_type)*n_choices, sizeof(ITEM *));
 
+    ctgItems[0] = new_item("All", "");
+    ctgItems[1] = new_item("Saved", "");
     // We know what the type of begin() iterator should be. Lets use C++11's auto specifier instead
     // to make the code more readable.
     for(auto it = labels->begin(); it != labels->end(); ++it){
-        std::string count = std::to_string(feedly.getUnreadCount(it->first));
-        char * cstr = new char [count.length()+1];
-        std::strcpy (cstr, count.c_str());
-        ctgItems[i] = new_item((it->first).c_str(), cstr);
-        i++;
+        if(it->first.compare("All") != 0 && it->first.compare("Saved") != 0){
+            ctgItems[i] = new_item((it->first).c_str(), "");
+            i++;
+
+        }
     }
 
     ctgMenu = new_menu((ITEM **)ctgItems);
@@ -319,12 +326,12 @@ void CursesProvider::createCategoriesMenu(){
     set_menu_grey(ctgMenu, COLOR_PAIR(8));
 
     set_menu_mark(ctgMenu, "  ");
+    menu_opts_on(postsMenu, O_NONCYCLIC);
+    post_menu(ctgMenu);
+
+    if(activeCount) updateUnreadCount();
 
     win_show(ctgWin, strdup("Categories"),  2, false);
-
-    menu_opts_on(postsMenu, O_NONCYCLIC);
-
-    post_menu(ctgMenu);
 }
 void CursesProvider::createPostsMenu(){
     int height, width;
@@ -385,6 +392,8 @@ void CursesProvider::ctgMenuCallback(char* label){
 
     getmaxyx(postsWin, height, width);
     getbegyx(postsWin, starty, startx);
+
+    if(activeCount) updateUnreadCount();
 
     int n_choices, i = 0;
     const std::vector<PostData>* posts = feedly.givePostsFromStream(label, currentRank);
@@ -474,7 +483,7 @@ void CursesProvider::changeSelectedItem(MENU* curMenu, int req){
         update_statusline(NULL, std::string(data->originTitle + " - " + data->title).c_str(), true);
     }
     update_panels();
-    markItemRead(curItem);
+    if(markReadWhileScroll) markItemRead(curItem);
 }
 void CursesProvider::postsMenuCallback(ITEM* item, bool preview){
     if(access("/usr/bin/w3m", X_OK) != 0) return;
@@ -489,11 +498,37 @@ void CursesProvider::postsMenuCallback(ITEM* item, bool preview){
     lastEntryRead = item_description(item);
     system(std::string("rm " + TMPDIR + "/preview.html 2> /dev/null").c_str());
 }
+void CursesProvider::updateUnreadCount(){
+    const std::map<std::string, unsigned int>* tmp = feedly.getUnreadCount();
+
+    ITEM* current = current_item(ctgMenu);
+
+    // There is some wierdness with c_str and ncurses so we will hard transform
+    // the string. Also ncurses doesn't give a nice function to change an item
+    // description so I will just reassign the pointer to it.
+
+    for(int i = 0; i < item_count(ctgMenu);i++){
+        if(strncmp(item_name(ctgItems[i]),"Saved",5) == 0)
+            continue;
+        int num = tmp->at(feedly.getStreamId(item_name(ctgItems[i])));
+        std::string count = std::to_string(num);
+        char * cstr = new char [count.length()+1];
+        std::strcpy (cstr, count.c_str());
+        ctgItems[i]->description = TEXT{cstr, (short unsigned int)(count.length() + 1)};
+        set_current_item(ctgMenu, ctgItems[i]);
+    }
+
+    unpost_menu(ctgMenu);
+    set_menu_items(ctgMenu, ctgItems);
+    post_menu(ctgMenu);
+    set_current_item(ctgMenu, current);
+
+    delete tmp;
+}
 void CursesProvider::markItemRead(ITEM* item){
     if(item_opts(item) && item != NULL){
         item_opts_off(item, O_SELECTABLE);
 
-        // Fix this
         if(item_name(current_item(ctgMenu)) != std::string("Saved")){
             update_statusline("[Marking post read]", NULL, true);
 
@@ -635,6 +670,7 @@ void CursesProvider::update_statusline(const char* update, const char* post, boo
         statusLine[0] = std::string(update);
     if (post != NULL)
         statusLine[1] = std::string(post);
+
     if (showCounter) {
         std::stringstream sstm;
         sstm << "[" << numUnread << ":" << numRead << "/" << totalPosts << "]";
@@ -646,20 +682,25 @@ void CursesProvider::update_statusline(const char* update, const char* post, boo
     clear_statusline();
     move(LINES - 2, 0);
     clrtoeol();
+
     attron(COLOR_PAIR(1));
     mvprintw(LINES - 2, 0, statusLine[0].c_str());
     attroff(COLOR_PAIR(1));
+
     mvprintw(LINES - 2, statusLine[0].empty() ? 0 : (statusLine[0].length() + 1), statusLine[1].substr(0,
                 COLS - statusLine[0].length() - statusLine[2].length() - 2).c_str());
+
     attron(COLOR_PAIR(3));
     mvprintw(LINES - 2, COLS - statusLine[2].length(), statusLine[2].c_str());
     attroff(COLOR_PAIR(3));
+
     refresh();
     update_panels();
 }
 void CursesProvider::update_infoline(const char* info){
     move(LINES-1, 0);
     clrtoeol();
+
     attron(COLOR_PAIR(5));
     mvprintw(LINES - 1, 0, info);
     attroff(COLOR_PAIR(5));

@@ -24,6 +24,8 @@ class CursesProvider{
                 std::string lastEntryRead, statusLine[3];
                 bool currentRank = 0;
                 bool activatePreview = 1;
+                bool activeCount = 1;
+                bool markReadWhileScroll = 1;
                 int totalPosts = 0, numRead = 0, numUnread = 0;
                 int viewWinHeightPer = VIEW_WIN_HEIGHT_PER, viewWinHeight = 0, ctgWinWidth = CTG_WIN_WIDTH;
                 bool currentCategoryRead;
@@ -34,6 +36,7 @@ class CursesProvider{
                 void postsMenuCallback(ITEM* item, bool preview);
                 void newFeedDialog(void);
                 void markItemRead(ITEM* item);
+                void updateUnreadCount(void);
                 void win_show(WINDOW *win, char *label, int label_color, bool highlight);
                 void print_in_middle(WINDOW *win, int starty, int startx, int width, const char *str, chtype color);
                 void print_in_center(WINDOW *win, int starty, int startx, int height, int width, const char *str, chtype color);
