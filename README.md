@@ -36,7 +36,7 @@ Thank you @bandb42 for mentioning the following dependencies for Fedora:
 
 `sudo yum install dh-autoreconf ncursesw-devel jsoncpp-devel libcurl-devel`
 
-## Clarification on Sign In Method (PLEASE READ)
+## Notes on Sign In Method and Rate Limiting (PLEASE READ)
 
 Due to the fact that this is open source, the administrators at Feedly have
 asked me to use their developer tokens instead of giving me a client secret.
@@ -50,6 +50,16 @@ to keep this project open source, hence this new method.
 **I have modified Feednix to help you with this. IT CANNOT DO THIS**
 **AUTOMATICALLY since developer tokens involve sending you an email**
 **to retrive them.**
+
+In addition, becuase it is using the Dev Tokens, it is thus using the Sandbox.
+This means that there is a rate limiting to the amount of requests that Feednix
+can make. If you use Feednix rarely you will probably be fine. If you use it often,
+however, you should consider disabling a few features to minimize the amount of
+requests. This includes having this in your config file:
+
+* markReadWhileScrolling : false
+* enablePersistentCount : false
+
 
 ## Usage
 
