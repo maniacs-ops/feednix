@@ -32,7 +32,7 @@
                 // Oldest true 
    "rank" : false,
    "previewActive" : true,
-   "markReadWhileScrolling" : false,
+   "markReadWhileScrolling" : true,
    // Enables Unread Count on Categories Menu
    "enablePersistentCount" : true
 }
