@@ -1,3 +1,17 @@
+1.0
+==========
+* Added Unread Count to Categories
+* Added customizing options markReadWhileScrolling option
+* Moved some macros to const variables to avoid unecessary conversion
+* Cleaned up Curl operations in FeedlyProvider that were repetetive
+* Major code refactoring
+* Bug fixes
+
+0.9.6.1
+==========
+* Major bug fixes
+* Ncurses reformatting
+
 0.9.5.1
 ==========
 * Redefined links for jsoncpp after update

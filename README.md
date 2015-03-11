@@ -87,6 +87,15 @@ Please visit this [page](https://feednix-jarkore.rhcloud.com) for details.
 ###Update for Ubuntu and Fedora users
 An issue with seg faults on start up was reported and has now been resolved. This was due to a dependency conflict with libncursesw. Please reinstall the dependcies (which have been updated) and clone the Ubuntu-stable branch instead of the main.
 
+###v1.0
+
+* You can now see an Unread Count for each categories
+* Added customizing options markReadWhileScrolling option
+* Moved some macros to const variables to avoid unecessary conversion
+* Cleaned up Curl operations in FeedlyProvider that were repetetive
+* Major code refactoring
+* Bug fixes
+
 ###v0.9
 Once again many thanks to [lejenome](https://github.com/lejenome) for the following:
 
