@@ -14,11 +14,20 @@ An ncurses based client for [Feedly](http://feedly.com/).
 
 ## Install
 
+**Note: Feednix requires C++11 support so you must build it with gcc 4.7 or higher**
+
 ### Distribution Packages
 
 [Arch Linux](https://aur.archlinux.org/packages/feednix/)
 
 ### From Source
+Thank you @chrisjohnston for mentioning the following dependencies for Ubuntu:
+
+`sudo apt-get install dh-autoreconf libjsoncpp-dev libcurl4-gnutls-dev libncursesw5-dev`
+
+Thank you @bandb42 for mentioning the following dependencies for Fedora:
+
+`sudo yum install dh-autoreconf ncursesw-devel jsoncpp-devel libcurl-devel`
 
 **Note:** If you are using Ubuntu, Fedora, Mint or you are getting an error during build, please use the Ubuntu-stable branch instead of the main.
 
@@ -28,13 +37,6 @@ Then run your standard make commands. Here is a one liner:
 
 `./configure && make && sudo make install`
 
-Thank you @chrisjohnston for mentioning the following dependencies for Ubuntu:
-
-`sudo apt-get install dh-autoreconf libjsoncpp-dev libcurl4-gnutls-dev libncursesw5-dev`
-
-Thank you @bandb42 for mentioning the following dependencies for Fedora:
-
-`sudo yum install dh-autoreconf ncursesw-devel jsoncpp-devel libcurl-devel`
 
 ## Notes on Sign In Method and Rate Limiting (PLEASE READ)
 
