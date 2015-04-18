@@ -194,7 +194,7 @@ const std::vector<PostData>* FeedlyProvider::givePostsFromStream(const std::stri
     else if(category == "Saved")
         curl_retrive("streams/contents?ranked=" + rank + "&count=" + rtrv_count + "&unreadOnly=true&streamId=" + std::string(curl_easy_escape(curl, (user_data.categories["Saved"]).c_str(), 0)));
     else
-        curl_retrive("streams/" + std::string(curl_easy_escape(curl, user_data.categories[category].c_str(), 0)) + "/contents?unreadOnly=true&ranked=newest&count=" + rtrv_count);
+        curl_retrive("streams/" + std::string(curl_easy_escape(curl, user_data.categories[category].c_str(), 0)) + "/contents?unreadOnly=true&ranked=" + rank +"&count=" + rtrv_count);
 
     Json::Reader reader;
     Json::Value root;
