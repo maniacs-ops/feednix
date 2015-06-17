@@ -42,7 +42,7 @@ int main(int argc, char **argv){
 
     //Insure that config file and directory are present if not copy default into user home
     if(fopen(std::string(std::string(HOME_PATH) + "/.config/feednix/config.json").c_str(), "r") == NULL){
-        system(("mkdir -p " + HOME_PATH + "/config/feednix &> /dev/null").c_str());
+        system(("mkdir -p " + HOME_PATH + "/.config/feednix &> /dev/null").c_str());
         system(("cp /etc/xdg/feednix/config.json " + HOME_PATH + "/.config/feednix").c_str());
         system(("chmod 600 " + HOME_PATH + "/.config/feednix/config.json").c_str());
     }

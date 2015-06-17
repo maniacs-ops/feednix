@@ -76,7 +76,7 @@ void CursesProvider::init(){
         endwin();
         feedly.curl_cleanup();
         std::cerr << "ERROR: Config file could not be read." << std::endl;
-        std::cerr << reader.getFormatedErrorMessages() << std::endl;
+        std::cerr << reader.getFormattedErrorMessages() << std::endl;
         exit(EXIT_FAILURE);
     }
 
