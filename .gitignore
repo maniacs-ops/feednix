@@ -57,3 +57,5 @@ src/Makefile
 src/feednix
 *.gch
 *.ghc
+.ycm_*
+feednix-aur
