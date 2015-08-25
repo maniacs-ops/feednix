@@ -12,43 +12,52 @@ CursesProvider *curses;
 std::string TMPDIR;
 std::string HOME_PATH = getenv("HOME");
 
-void atExitFunction(void){
+void atExitFunction()
+{
     system(std::string("find " + std::string(HOME_PATH) + "/.config/feednix -type f -not -name \'config.json\' -and -not -name \'log.txt\' -delete 2> /dev/null").c_str());
     system(std::string("rm -R " + TMPDIR + " 2> /dev/null").c_str());
-    if(curses != NULL)
+    if (curses not_eq NULL)
+    {
         curses->cleanup();
+    }
 }
 
-void sighandler(int signum){
+void sighandler(int signum)
+{
     system(std::string("find " + std::string(HOME_PATH) + "/.config/feednix -type f -not -name \'config.json\' -and -not -name \'log.txt\' -delete 2> /dev/null").c_str());
     signal(signum, SIG_DFL);
-    if(curses != NULL)
+    if (curses != NULL)
+    {
         curses->cleanup();
+    }
     kill(getpid(), signum);
     std::cerr << "Aborted" << std::endl;
 }
 
 void printUsage();
 
-int main(int argc, char **argv){
+int main(int argc, char **argv)
+{
     signal(SIGINT, sighandler);
     signal(SIGTERM, sighandler);
     signal(SIGSEGV, sighandler);
     atexit(atExitFunction);
 
-    bool verboseEnabled = false;
-    bool changeTokens = false;
 
     //Insure that config file and directory are present if not copy default into user home
-    if(fopen(std::string(std::string(HOME_PATH) + "/.config/feednix/config.json").c_str(), "r") == NULL){
+    std::string configPath = HOME_PATH + "/.config/feednix/config.json";
+    if (fopen(configPath.c_str(), "r") == NULL)
+    {
         system(("mkdir -p " + HOME_PATH + "/.config/feednix &> /dev/null").c_str());
         system(("cp /etc/xdg/feednix/config.json " + HOME_PATH + "/.config/feednix").c_str());
         system(("chmod 600 " + HOME_PATH + "/.config/feednix/config.json").c_str());
     }
 
     char *sys_tmpdir = getenv("TMPDIR");
-    if(!sys_tmpdir)
+    if (not sys_tmpdir)
+    {
         sys_tmpdir = (char *)"/tmp";
+    }
 
     char * pathTemp = (char *)malloc(sizeof(char) * (strlen(sys_tmpdir) + 16));
     strcpy(pathTemp, sys_tmpdir);
@@ -57,18 +66,35 @@ int main(int argc, char **argv){
     TMPDIR = std::string(mkdtemp(pathTemp));
     free(pathTemp);
 
-    if(argc >= 2){
-        for(int i = 1; i < argc; ++i){
-            if(argv[i][0] == '-' && argv[i][1] == 'h' && strlen(argv[1]) <= 2){
+
+    if (argc >= 2)
+    {
+        bool verboseEnabled = false;
+        bool changeTokens = false;
+
+        for (int i = 1; i < argc; ++i)
+        {
+            if (argv[i][0] == '-' && argv[i][1] == 'h' && strlen(argv[1]) <= 2)
+            {
                 printUsage();
                 return 0;
             }
-            else{
-                if(argv[i][0] == '-' && argv[i][1] == 'v' && strlen(argv[1]) <= 2)
+            else
+            {
+                if (argv[i][0] == '-' && argv[i][1] == 'v' && strlen(argv[1]) <= 2)
+                {
                     verboseEnabled = true;
-                else if(argv[i][0] == '-' && argv[i][1] == 'c' && strlen(argv[1]) <= 2)
+                }
+                else if (argv[i][0] == '-' && argv[i][1] == 'c' && strlen(argv[1]) <= 2)
+                {
                     changeTokens = true;
-                else if(argv[i][0] != '-' || ((argv[i][0] == '-' && ((argv[i][1] != 'v' && argv[i][1] != 'c' && argv[i][1] != 'h') || strlen(argv[1]) >= 2)))){
+                }
+                else if (argv[i][0] != '-' ||
+                        ((argv[i][0] == '-' &&
+                          ((argv[i][1] != 'v' &&
+                            argv[i][1] != 'c' &&
+                            argv[i][1] != 'h') || strlen(argv[1]) >= 2))))
+                {
                     std::cerr << "ERROR: Invalid option " << "\'" << argv[i] << "\'\n" << std::endl;
                     printUsage();
                     return 0;
@@ -77,7 +103,8 @@ int main(int argc, char **argv){
         }
         curses = new CursesProvider(verboseEnabled, changeTokens);
     }
-    else{
+    else
+    {
         curses = new CursesProvider(false, false);
     }
 
