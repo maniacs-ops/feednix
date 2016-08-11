@@ -1,0 +1,12 @@
+- [ ] Remove C stuff (#define, NULL, fopen, fclose, malloc, free)
+- [ ] Use C++ stuff instread of system call
+- [ ] When possible don't use raw pointer
+- [ ] Cleanup string formatting
+- [ ] Split in more files if neccessary
+- [ ] Switch do CMake if neccessary
+- [ ] Write tests if neccessary
+- [ ] Add option to disable automatic writing
+- [ ] Add options to use alternative cmd line browsers
+- [ ] Add tags ability
+- [ ] Add an about pane
+- [ ] See if we want to add social networking abilities
