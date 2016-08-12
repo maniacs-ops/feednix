@@ -87,10 +87,9 @@ int main(int argc, char **argv) {
     TMPDIR = std::string(mkdtemp(pathTemp));
     free(pathTemp);
 
+    bool verboseEnabled = false;
+    bool changeTokens = false;
     if (argc >= 2) {
-        bool verboseEnabled = false;
-        bool changeTokens = false;
-
         for (int i = 1; i < argc; ++i) {
             if (argv[i][0] == '-' && argv[i][1] == 'h' &&
                 strlen(argv[1]) <= 2) {
@@ -116,10 +115,8 @@ int main(int argc, char **argv) {
                 }
             }
         }
-        curses = new CursesProvider(verboseEnabled, changeTokens);
-    } else {
-        curses = new CursesProvider();
-    }
+    } 
+    curses = new CursesProvider(verboseEnabled, changeTokens);
 
     curses->init();
     curses->eventHandler();
