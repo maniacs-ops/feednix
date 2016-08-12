@@ -40,21 +40,25 @@ void sighandler(int signum) {
 void printUsage(char **argv) {
     std::cout << "Usage: " << argv[0] << " [OPTIONS]" << std::endl;
     std::cout << "\tAn ncurses-based console client for Feedly written in C++"
-              << std::endl;
+                << std::endl;
     std::cout << std::endl << "Options:" << std:: endl
                 << "\t-h\t\tDisplay this help and exit" << std::endl
-                << "\t-v\t\tSet curl to output in verbose mode during login" << std::endl
+                << "\t-v\t\tSet curl to output in verbose mode during login" 
+                << std::endl
                 << "\t-c\t\tChange tokens with prompt" << std::endl;
     std::cout << std::endl << "Config:" << std::endl
-                << "Feednix uses a config file to set colors" << std::endl
-                << "and the amount of posts to be retrived per request." << std::endl;
-    std::cout << std::endl << "This file can be found and must be placed in:" << std::endl 
+                << "\tFeednix uses a config file to set colors" << std::endl
+                << "\tand the amount of posts to be retrived per request." 
+                << std::endl;
+    std::cout << std::endl << "This file can be found and must be placed in:" 
+                << std::endl 
                 << "\t$HOME/.config/feednix" << std::endl
                 << "\tA log file can also be found here." << std::endl 
-                << "\tA sample config can be found in /etc/feednix" << std::endl;
+                << "\tA sample config can be found in /etc/feednix" 
+                << std::endl;
     std::cout << std::endl << "Bugs:" << std::endl 
-                << "Please report any bugs on Github "
-                 "<https://github.com/Jarkore/Feednix>" << std::endl;
+                << "\tPlease report any bugs on Github "
+                "<https://github.com/Jarkore/Feednix>" << std::endl;
 }
 
 int main(int argc, char **argv) {
