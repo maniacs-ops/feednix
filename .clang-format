@@ -1,0 +1,5 @@
+language: cpp
+BasedOnStyle: Google
+IndentWidth: 4
+AllowShortFunctionsOnASingleLine: false
+Standard: C++11
