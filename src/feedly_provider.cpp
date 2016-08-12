@@ -7,7 +7,7 @@
 #include <istream>
 #include <termios.h>
 #include <unistd.h>
-#include "FeedlyProvider.h"
+#include "feedly_provider.h"
 
 extern const std::string HOME_PATH;
 extern std::string TMPDIR;

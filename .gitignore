@@ -59,3 +59,6 @@ src/feednix
 *.ghc
 .ycm_*
 feednix-aur
+
+# CMake
+build

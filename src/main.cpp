@@ -6,7 +6,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-#include "CursesProvider.h"
+#include "curses_provider.h"
 
 CursesProvider *curses;
 std::string TMPDIR;

@@ -6,7 +6,7 @@
 #include <curses.h>
 #include <menu.h>
 #include <panel.h>
-#include "FeedlyProvider.h"
+#include "feedly_provider.h"
 
 
 #define CTG_WIN_WIDTH 40

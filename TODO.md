@@ -3,7 +3,7 @@
 - [ ] When possible don't use raw pointer
 - [ ] Cleanup string formatting
 - [ ] Split in more files if neccessary
-- [ ] Switch do CMake if neccessary
+- [x] Switch do CMake if neccessary
 - [ ] Write tests if neccessary
 - [ ] Add option to disable automatic writing
 - [ ] Add options to use alternative cmd line browsers

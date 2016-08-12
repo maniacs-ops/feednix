@@ -17,7 +17,7 @@
 #include <signal.h>
 #include <json/json.h>
 
-#include "CursesProvider.h"
+#include "curses_provider.h"
 
 #define ARRAY_SIZE(a) (sizeof(a) / sizeof(a[0]))
 #define POSTS_STATUSLINE "Enter: See Preview  A: mark all read  u: mark unread  r: mark read  = : change sort type s: mark saved  S: mark unsaved R: refresh  o: Open in plain-text  O: Open in Browser  F1: exit"
