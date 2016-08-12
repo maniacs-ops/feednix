@@ -36,7 +36,25 @@ void sighandler(int signum) {
     std::cerr << "Aborted" << std::endl;
 }
 
-void printUsage();
+void printUsage(char **argv) {
+    std::cout << "Usage: " << argv[0] << " [OPTIONS]" << std::endl;
+    std::cout << "\tAn ncurses-based console client for Feedly written in C++"
+              << std::endl;
+    std::cout << std::endl << "Options:" << std:: endl
+                << "\t-h\t\tDisplay this help and exit" << std::endl
+                << "\t-v\t\tSet curl to output in verbose mode during login" << std::endl
+                << "\t-c\t\tChange tokens with prompt" << std::endl;
+    std::cout << std::endl << "Config:" << std::endl
+                << "Feednix uses a config file to set colors" << std::endl
+                << "and the amount of posts to be retrived per request." << std::endl;
+    std::cout << std::endl << "This file can be found and must be placed in:" << std::endl 
+                << "\t$HOME/.config/feednix" << std::endl
+                << "\tA log file can also be found here." << std::endl 
+                << "\tA sample config can be found in /etc/feednix" << std::endl;
+    std::cout << std::endl << "Bugs:" << std::endl 
+                << "Please report any bugs on Github "
+                 "<https://github.com/Jarkore/Feednix>" << std::endl;
+}
 
 int main(int argc, char **argv) {
     signal(SIGINT, sighandler);
@@ -76,7 +94,7 @@ int main(int argc, char **argv) {
         for (int i = 1; i < argc; ++i) {
             if (argv[i][0] == '-' && argv[i][1] == 'h' &&
                 strlen(argv[1]) <= 2) {
-                printUsage();
+                printUsage(argv);
                 return 0;
             } else {
                 if (argv[i][0] == '-' && argv[i][1] == 'v' &&
@@ -93,7 +111,7 @@ int main(int argc, char **argv) {
                     std::cerr << "ERROR: Invalid option "
                               << "\'" << argv[i] << "\'\n"
                               << std::endl;
-                    printUsage();
+                    printUsage(argv);
                     return 0;
                 }
             }
@@ -110,27 +128,3 @@ int main(int argc, char **argv) {
     return 0;
 }
 
-void printUsage() {
-    std::cout << "Usage: feednix [OPTIONS]" << std::endl;
-    std::cout << "  An ncurses-based console client for Feedly written in C++"
-              << std::endl;
-    std::cout << "\n Options:\n  -h        Display this help and exit\n  -v    "
-                 "    Set curl to output in verbose mode during login\n  -c    "
-                 "    Change tokens with prompt"
-              << std::endl;
-    std::cout << "\n Config:\n   Feednix uses a config file to set colors "
-                 "and\n   and the amount of posts to be retrived per\n   "
-                 "request."
-              << std::endl;
-    std::cout << "\n   This file can be found and must be placed in:\n     "
-                 "$HOME/.config/feednix\n   A log file can also be found "
-                 "here.\n   A sample config can be found in /etc/feednix"
-              << std::endl;
-    std::cout << "\n Author:\n   Copyright Jorge Martinez Hernandez "
-                 "<jorgemartinezhernandez@gmail.com>\n   Licensing information "
-                 "can be found in the source code"
-              << std::endl;
-    std::cout << "\n Bugs:\n   Please report any bugs on Github "
-                 "<https://github.com/Jarkore/Feednix>"
-              << std::endl;
-}
