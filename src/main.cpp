@@ -1,7 +1,7 @@
-#include <signal.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
+#include <csignal>
+#include <cstdio>
+#include <cstdlib>
+#include <cstring>
 #include <sys/types.h>
 #include <unistd.h>
 #include <iostream>
@@ -10,6 +10,7 @@
 
 CursesProvider *curses;
 std::string TMPDIR;
+// XXX: ~ should do the job.
 std::string HOME_PATH = getenv("HOME");
 
 void atExitFunction() {
@@ -18,7 +19,7 @@ void atExitFunction() {
                        "-and -not -name \'log.txt\' -delete 2> /dev/null")
                .c_str());
     system(std::string("rm -R " + TMPDIR + " 2> /dev/null").c_str());
-    if (curses not_eq NULL) {
+    if (curses not_eq nullptr) {
         curses->cleanup();
     }
 }
@@ -29,7 +30,7 @@ void sighandler(int signum) {
                        "-and -not -name \'log.txt\' -delete 2> /dev/null")
                .c_str());
     signal(signum, SIG_DFL);
-    if (curses != NULL) {
+    if (curses != nullptr) {
         curses->cleanup();
     }
     kill(getpid(), signum);
@@ -65,7 +66,9 @@ int main(int argc, char **argv) {
     // Insure that config file and directory are present if not copy default
     // into user home
     std::string configPath = HOME_PATH + "/.config/feednix/config.json";
-    if (fopen(configPath.c_str(), "r") == NULL) {
+    // XXX: WTF fopen ??
+    if (fopen(configPath.c_str(), "r") == nullptr) {
+        // XXX: WTF system ? Use C++ code.
         system(("mkdir -p " + HOME_PATH + "/.config/feednix &> /dev/null")
                    .c_str());
         system(("cp /etc/xdg/feednix/config.json " + HOME_PATH +
