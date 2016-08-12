@@ -30,6 +30,10 @@
 extern std::string TMPDIR;
 extern const std::string HOME_PATH;
 
+CursesProvider::CursesProvider() {
+    CursesProvider(false, false);
+}
+
 CursesProvider::CursesProvider(bool verbose, bool change) {
     feedly.setVerbose(verbose);
     feedly.setChangeTokensFlag(change);

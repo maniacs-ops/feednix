@@ -13,6 +13,7 @@
 
 class CursesProvider {
    public:
+    CursesProvider();
     CursesProvider(bool verbose, bool change);
     void init();
     void eventHandler();

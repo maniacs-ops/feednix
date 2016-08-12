@@ -100,7 +100,7 @@ int main(int argc, char **argv) {
         }
         curses = new CursesProvider(verboseEnabled, changeTokens);
     } else {
-        curses = new CursesProvider(false, false);
+        curses = new CursesProvider();
     }
 
     curses->init();
