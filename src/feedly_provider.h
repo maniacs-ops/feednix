@@ -3,16 +3,15 @@
 #pragma once
 
 #include <curl/curl.h>
-#include <string>
-#include <iostream>
 #include <fstream>
+#include <iostream>
 #include <map>
+#include <string>
 #include <vector>
 
 #define DEFAULT_FCOUNT 500
 
-struct UserData
-{
+struct UserData {
     std::map<std::string, std::string> categories;
     std::string id;
     std::string code;
@@ -21,8 +20,7 @@ struct UserData
     std::string galx;
 };
 
-struct PostData
-{
+struct PostData {
     std::string content;
     std::string title;
     std::string id;
@@ -30,58 +28,49 @@ struct PostData
     std::string originTitle;
 };
 
-class FeedlyProvider
-{
-    public:
-        const std::map<std::string, std::string>* getLabels();
-        const std::string getUserId();
-        const std::string getStreamId(const std::string& label);
-        const std::map<std::string, unsigned int>* getUnreadCount(void);
+class FeedlyProvider {
+   public:
+    const std::map<std::string, std::string>* getLabels();
+    const std::string getUserId();
+    const std::string getStreamId(const std::string& label);
+    const std::map<std::string, unsigned int>* getUnreadCount(void);
 
-        FeedlyProvider();
-        PostData* getSinglePostData(const int index);
-        void authenticateUser();
-        void setVerbose(bool value);
-        void setChangeTokensFlag(bool value);
-        void curl_cleanup();
-        bool markPostWithAction(
-                const std::string &action,
-                const std::vector<std::string>* ids
-                );
-        bool markCategoriesRead(
-                const std::string& id,
-                const std::string& lastReadEntryId
-                );
-        bool addSubscription(
-                bool newCategory,
-                const std::string& feed,
-                std::vector<std::string> categories,
-                const std::string& title = ""
-                );
-        const std::vector<PostData>* givePostsFromStream(
-                const std::string& category,
-                bool whichRank = 0
-                );
-    private:
-        UserData user_data;
-        CURL *curl;
-        CURLcode curl_res;
-        std::ofstream log_stream;
-        std::string feedly_url;
-        std::string userAuthCode;
-        std::string TOKEN_PATH, TEMP_PATH, COOKIE_PATH, rtrv_count;
-        std::vector<PostData> feeds;
-        const std::string FEEDLY_URI = "https://cloud.feedly.com/v3/";
-        long response_code = 0;
-        bool verboseFlag = false;
-        bool changeTokens = false;
-        bool isLogStreamOpen=false;
+    FeedlyProvider();
+    PostData* getSinglePostData(const int index);
+    void authenticateUser();
+    void setVerbose(bool value);
+    void setChangeTokensFlag(bool value);
+    void curl_cleanup();
+    bool markPostWithAction(const std::string& action,
+                            const std::vector<std::string>* ids);
+    bool markCategoriesRead(const std::string& id,
+                            const std::string& lastReadEntryId);
+    bool addSubscription(bool newCategory, const std::string& feed,
+                         std::vector<std::string> categories,
+                         const std::string& title = "");
+    const std::vector<PostData>* givePostsFromStream(
+        const std::string& category, bool whichRank = 0);
 
-        void getCookies();
-        void enableVerbose();
-        void curl_retrive(const std::string&);
-        void curl_post(const std::string&, const std::string& data);
-        void extract_galx_value();
-        void openLogStream();
+   private:
+    UserData user_data;
+    CURL* curl;
+    CURLcode curl_res;
+    std::ofstream log_stream;
+    std::string feedly_url;
+    std::string userAuthCode;
+    std::string TOKEN_PATH, TEMP_PATH, COOKIE_PATH, rtrv_count;
+    std::vector<PostData> feeds;
+    const std::string FEEDLY_URI = "https://cloud.feedly.com/v3/";
+    long response_code = 0;
+    bool verboseFlag = false;
+    bool changeTokens = false;
+    bool isLogStreamOpen = false;
+
+    void getCookies();
+    void enableVerbose();
+    void curl_retrive(const std::string&);
+    void curl_post(const std::string&, const std::string& data);
+    void extract_galx_value();
+    void openLogStream();
 };
 #endif
