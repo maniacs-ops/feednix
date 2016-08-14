@@ -2,13 +2,14 @@
 #include <cstdio>
 #include <cstdlib>
 #include <cstring>
+#include <memory>
 #include <sys/types.h>
 #include <unistd.h>
 #include <iostream>
 
 #include "curses_provider.h"
 
-CursesProvider *curses;
+std::unique_ptr<CursesProvider> curses;
 std::string TMPDIR;
 // XXX: ~ should do the job.
 std::string HOME_PATH = getenv("HOME");
@@ -123,12 +124,11 @@ int main(int argc, char **argv) {
             }
         }
     } 
-    curses = new CursesProvider(verboseEnabled, changeTokens);
+    curses = std::make_unique<CursesProvider>(verboseEnabled, changeTokens);
 
     curses->init();
     curses->eventHandler();
 
-    delete curses;
     return 0;
 }
 
