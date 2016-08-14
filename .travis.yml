@@ -4,6 +4,9 @@ compiler:
     - gcc
 addons:
     apt:
+        sources:
+            - sourceline: 'ppa:ubuntu-toolchain-r/test'
+            - sourceline: 'ppa:h-rayflood/llvm'
         packages:
             - cmake
             - libjsoncpp-dev
