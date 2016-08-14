@@ -1,7 +1,7 @@
 - [ ] Remove C stuff (#define, NULL, fopen, fclose, malloc, free)
 - [ ] Use C++ stuff instread of system call
 - [ ] When possible don't use raw pointer
-- [ ] Cleanup string formatting
+- [x] Cleanup string formatting
 - [ ] Split in more files if neccessary
 - [x] Switch do CMake if neccessary
 - [ ] Write tests if neccessary
