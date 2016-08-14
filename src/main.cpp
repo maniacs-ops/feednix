@@ -4,15 +4,21 @@
 #include <cstring>
 #include <memory>
 #include <sys/types.h>
+#include <sys/stat.h>
 #include <unistd.h>
+#include <fstream>
 #include <iostream>
 
 #include "curses_provider.h"
 
+// XXX: make it static and const and remove extern call in other file
+std::string HOME_PATH = getenv("HOME");
+static const std::string CONFIG_DIR_PATH = HOME_PATH + "/.config/feednix";
+static const std::string DEFAULT_CONFIG_FILE_PATH = "/etc/xdg/feednix/config.json";
+static const std::string USER_CONFIG_FILE_PATH = CONFIG_DIR_PATH + "/config.json";
+
 std::unique_ptr<CursesProvider> curses;
 std::string TMPDIR;
-// XXX: ~ should do the job.
-std::string HOME_PATH = getenv("HOME");
 
 void atExitFunction() {
     system(std::string("find " + std::string(HOME_PATH) +
@@ -56,25 +62,50 @@ void printUsage(char **argv) {
                 "<https://github.com/Jarkore/Feednix>" << std::endl;
 }
 
+bool checkIfConfigDirectoryExists() {
+    struct stat st;
+    if(stat(CONFIG_DIR_PATH.c_str(), &st) == 0){
+        if(st.st_mode & S_IFDIR)
+                return true;
+    }
+}
+
+bool createConfigDirectory() {
+    int result = mkdir(CONFIG_DIR_PATH.c_str(), 0755);
+    return result == 0;
+}
+
+bool copyDefaultConfigFile() {
+    std::ifstream source(DEFAULT_CONFIG_FILE_PATH, std::ios::binary);
+    std::ofstream destination(USER_CONFIG_FILE_PATH, std::ios::binary);
+
+    if(source && destination) {
+        destination << source.rdbuf();
+        return true;
+    }
+    return false;
+}
+
 int main(int argc, char **argv) {
     signal(SIGINT, sighandler);
     signal(SIGTERM, sighandler);
     signal(SIGSEGV, sighandler);
     atexit(atExitFunction);
 
-    // Insure that config file and directory are present if not copy default
-    // into user home
-    std::string configPath = HOME_PATH + "/.config/feednix/config.json";
-    // XXX: WTF fopen ??
-    if (fopen(configPath.c_str(), "r") == nullptr) {
-        // XXX: WTF system ? Use C++ code.
-        system(("mkdir -p " + HOME_PATH + "/.config/feednix &> /dev/null")
-                   .c_str());
-        system(("cp /etc/xdg/feednix/config.json " + HOME_PATH +
-                "/.config/feednix")
-                   .c_str());
-        system(("chmod 600 " + HOME_PATH + "/.config/feednix/config.json")
-                   .c_str());
+    if(!checkIfConfigDirectoryExists()) {
+        if(createConfigDirectory()){
+            if(!copyDefaultConfigFile()){
+                std::cerr << "Error while copying default config file" 
+                    << std::endl;
+                return -1;
+            }
+        }
+        else{
+            std::cerr << "Error while createing the config directory" 
+                << std::endl;
+            return -1;
+        }
+    
     }
 
     char *sys_tmpdir = getenv("TMPDIR");
