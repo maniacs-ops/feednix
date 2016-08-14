@@ -20,16 +20,16 @@ class CursesProvider {
 
    private:
     FeedlyProvider feedly;
-    WINDOW *ctgWin = NULL;
-    WINDOW *postsWin = NULL;
-    WINDOW *viewWin = NULL;
+    WINDOW *ctgWin = nullptr;
+    WINDOW *postsWin = nullptr;
+    WINDOW *viewWin = nullptr;
     PANEL *panels[3];
-    PANEL *top = NULL;
-    ITEM **ctgItems = NULL;
-    ITEM **postsItems = NULL;
-    MENU *ctgMenu = NULL;
-    MENU *postsMenu = NULL;
-    MENU *curMenu = NULL;
+    PANEL *top = nullptr;
+    ITEM **ctgItems = nullptr;
+    ITEM **postsItems = nullptr;
+    MENU *ctgMenu = nullptr;
+    MENU *postsMenu = nullptr;
+    MENU *curMenu = nullptr;
     std::string lastEntryRead, statusLine[3];
     bool currentRank = 0;
     bool activatePreview = 1;

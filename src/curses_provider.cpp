@@ -54,7 +54,7 @@ CursesProvider::CursesProvider(bool verbose, bool change) {
 }
 
 CursesProvider::~CursesProvider() {
-    if (ctgMenu not_eq NULL) {
+    if (ctgMenu not_eq nullptr) {
         unpost_menu(ctgMenu);
         free_menu(ctgMenu);
 
@@ -66,7 +66,7 @@ CursesProvider::~CursesProvider() {
         free_menu(postsMenu);
     }
 
-    if (postsItems not_eq NULL) {
+    if (postsItems not_eq nullptr) {
         for (unsigned int i = 0; i < ARRAY_SIZE(postsItems); ++i) {
             free_item(postsItems[i]);
         }
@@ -162,6 +162,7 @@ void CursesProvider::init() {
     update_panels();
     doupdate();
 }
+
 void CursesProvider::eventHandler() {
     int ch;
     if (totalPosts == 0) {
@@ -268,8 +269,8 @@ void CursesProvider::eventHandler() {
                 break;
             }
             case 'r': {
-                if (postsMenu not_eq NULL && curItem not_eq NULL &&
-                    postsItems not_eq NULL) {
+                if (postsMenu not_eq nullptr && curItem not_eq nullptr &&
+                    postsItems not_eq nullptr) {
                     markItemRead(curItem);
                 }
                 break;
@@ -357,7 +358,7 @@ void CursesProvider::createCategoriesMenu() {
     const std::map<std::string, std::string> *labels = feedly.getLabels();
 
     n_choices = labels->size() + 1;
-    if (ctgItems == NULL) {
+    if (ctgItems == nullptr) {
         ctgItems = (ITEM **)calloc(sizeof(std::string::value_type) * n_choices,
                                    sizeof(ITEM *));
     }
@@ -403,7 +404,7 @@ void CursesProvider::createPostsMenu() {
     const std::vector<PostData> *posts =
         feedly.givePostsFromStream("All", currentRank);
 
-    if (posts not_eq NULL && posts->size() > 0) {
+    if (posts not_eq nullptr && posts->size() > 0) {
         int n_choices, i = 0;
         totalPosts = posts->size();
         numUnread = totalPosts;
@@ -441,7 +442,7 @@ void CursesProvider::createPostsMenu() {
     set_menu_mark(postsMenu, "*");
 
     win_show(postsWin, strdup("Posts"), 1, true);
-    if (posts == NULL) {
+    if (posts == nullptr) {
         win_show(ctgWin, strdup("Categories"), 1, true);
         win_show(postsWin, strdup("Posts"), 2, false);
     }
@@ -450,7 +451,7 @@ void CursesProvider::createPostsMenu() {
 
     post_menu(postsMenu);
 
-    if (posts == NULL) {
+    if (posts == nullptr) {
         print_in_center(postsWin, 3, 1, height, width - 4, "All Posts Read",
                         COLOR_PAIR(0));
     }
@@ -468,7 +469,7 @@ void CursesProvider::ctgMenuCallback(char *label) {
     int n_choices, i = 0;
     const std::vector<PostData> *posts =
         feedly.givePostsFromStream(label, currentRank);
-    if (posts == NULL) {
+    if (posts == nullptr) {
         totalPosts = 0;
         numRead = 0;
         numUnread = 0;
@@ -507,7 +508,7 @@ void CursesProvider::ctgMenuCallback(char *label) {
         i++;
     }
 
-    items[i] = NULL;
+    items[i] = nullptr;
 
     unpost_menu(postsMenu);
     set_menu_items(postsMenu, items);
@@ -553,7 +554,7 @@ void CursesProvider::changeSelectedItem(MENU *curMenu, int req) {
         if (stream) {
             char buffer[256];
             while (not feof(stream)) {
-                if (fgets(buffer, 256, stream) not_eq NULL) {
+                if (fgets(buffer, 256, stream) not_eq nullptr) {
                     content.append(buffer);
                 }
             }
@@ -616,7 +617,7 @@ void CursesProvider::updateUnreadCount() {
     delete tmp;
 }
 void CursesProvider::markItemRead(ITEM *item) {
-    if (item_opts(item) && item != NULL) {
+    if (item_opts(item) && item != nullptr) {
         item_opts_off(item, O_SELECTABLE);
 
         if (item_name(current_item(ctgMenu)) != std::string("Saved")) {
@@ -716,7 +717,7 @@ void CursesProvider::print_in_middle(WINDOW *win, int starty, int startx,
     int length, x, y;
     float temp;
 
-    if (win == NULL) {
+    if (win == nullptr) {
         win = stdscr;
     }
     getyx(win, y, x);
@@ -742,7 +743,7 @@ void CursesProvider::print_in_center(WINDOW *win, int starty, int startx,
     int length, x, y;
     float tempX, tempY;
 
-    if (win == NULL) {
+    if (win == nullptr) {
         win = stdscr;
     }
 
@@ -773,10 +774,10 @@ void CursesProvider::clear_statusline() {
 }
 void CursesProvider::update_statusline(const char *update, const char *post,
                                        bool showCounter) {
-    if (update != NULL) {
+    if (update != nullptr) {
         statusLine[0] = std::string(update);
     }
-    if (post != NULL) {
+    if (post != nullptr) {
         statusLine[1] = std::string(post);
     }
 
