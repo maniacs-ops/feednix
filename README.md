@@ -1,6 +1,6 @@
 Feednix
 =======
-[![Build Status](https://travis-ci.org/Jarkore/Feednix.svg?branch=v0.9)](https://travis-ci.org/Jarkore/Feednix)
+[![Build Status](https://travis-ci.org/just1602/feednix.svg?branch=develop)](https://travis-ci.org/just1602/feednix)
 
 An ncurses based client for [Feedly](http://feedly.com/).
 
@@ -14,7 +14,7 @@ An ncurses based client for [Feedly](http://feedly.com/).
 
 ## Install
 
-**Note: Feednix requires C++11 support so you must build it with gcc 4.7 or higher**
+**Note: feednix use c++14 feature**
 
 ### Distribution Packages
 
