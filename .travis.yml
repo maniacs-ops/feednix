@@ -9,6 +9,8 @@ addons:
             - ubuntu-toolchain-r-test
         packages:
             - cmake
+            - clang
+            - g++
             - libjsoncpp-dev
             - libcurl4-gnutls-dev
             - libncursesw5-dev
