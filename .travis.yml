@@ -5,8 +5,8 @@ compiler:
 addons:
     apt:
         sources:
-            - sourceline: 'ppa:ubuntu-toolchain-r/test'
-            - sourceline: 'ppa:h-rayflood/llvm'
+            - llvm-toolchain-precise
+            - ubuntu-toolchain-r-test
         packages:
             - cmake
             - libjsoncpp-dev
