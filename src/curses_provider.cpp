@@ -1,5 +1,5 @@
 #include <curses.h>
-#include <json/json.h>
+#include <jsoncpp/json/json.h>
 #include <menu.h>
 #include <panel.h>
 #include <signal.h>

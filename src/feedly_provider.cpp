@@ -1,6 +1,6 @@
 #include "feedly_provider.h"
-#include <json/json.h>
-#include <json/writer.h>
+#include <jsoncpp/json/json.h>
+#include <jsoncpp/json/writer.h>
 #include <cstdio>
 #include <cstdlib>
 #include <termios.h>
