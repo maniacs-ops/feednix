@@ -3,13 +3,12 @@
 #include <menu.h>
 #include <panel.h>
 #include <signal.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
+#include <cstdio>
+#include <cstdlib>
+#include <cstring>
 #include <termios.h>
 #include <unistd.h>
 #include <algorithm>
-#include <cstring>
 #include <iostream>
 #include <iterator>
 #include <map>

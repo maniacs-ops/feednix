@@ -1,8 +1,8 @@
 #include "feedly_provider.h"
 #include <json/json.h>
 #include <json/writer.h>
-#include <stdio.h>
-#include <stdlib.h>
+#include <cstdio>
+#include <cstdlib>
 #include <termios.h>
 #include <unistd.h>
 #include <algorithm>
