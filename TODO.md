@@ -4,6 +4,7 @@
 - [x] Cleanup string formatting
 - [ ] Split in more files if neccessary
 - [x] Switch do CMake if neccessary
+- [ ] Make generic and export in a separate file filesystem related functions
 - [ ] Write tests if neccessary
 - [ ] Add option to disable automatic writing
 - [ ] Add options to use alternative cmd line browsers
