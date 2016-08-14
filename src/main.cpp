@@ -65,8 +65,15 @@ void printUsage(char **argv) {
 bool checkIfConfigDirectoryExists() {
     struct stat st;
     if(stat(CONFIG_DIR_PATH.c_str(), &st) == 0){
-        if(st.st_mode & S_IFDIR)
-                return true;
+        if(st.st_mode & S_IFDIR){
+            return true;
+        }else{
+            return false;
+        }
+    }else{
+        std::cerr << "Failed to retrieve config directory informations"
+            << std::endl;
+        return false;
     }
 }
 
@@ -99,13 +106,11 @@ int main(int argc, char **argv) {
                     << std::endl;
                 return -1;
             }
-        }
-        else{
+        }else{
             std::cerr << "Error while createing the config directory" 
                 << std::endl;
             return -1;
         }
-    
     }
 
     char *sys_tmpdir = getenv("TMPDIR");
