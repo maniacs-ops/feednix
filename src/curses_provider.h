@@ -14,9 +14,9 @@ class CursesProvider {
    public:
     CursesProvider();
     CursesProvider(bool verbose, bool change);
+    ~CursesProvider();
     void init();
     void eventHandler();
-    void cleanup();
 
    private:
     FeedlyProvider feedly;

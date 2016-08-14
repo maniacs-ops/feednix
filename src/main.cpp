@@ -20,9 +20,6 @@ void atExitFunction() {
                        "-and -not -name \'log.txt\' -delete 2> /dev/null")
                .c_str());
     system(std::string("rm -R " + TMPDIR + " 2> /dev/null").c_str());
-    if (curses not_eq nullptr) {
-        curses->cleanup();
-    }
 }
 
 void sighandler(int signum) {
@@ -31,9 +28,6 @@ void sighandler(int signum) {
                        "-and -not -name \'log.txt\' -delete 2> /dev/null")
                .c_str());
     signal(signum, SIG_DFL);
-    if (curses != nullptr) {
-        curses->cleanup();
-    }
     kill(getpid(), signum);
     std::cerr << "Aborted" << std::endl;
 }

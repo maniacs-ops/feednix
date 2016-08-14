@@ -52,6 +52,30 @@ CursesProvider::CursesProvider(bool verbose, bool change) {
     currentCategoryRead = false;
     feedly.setVerbose(false);
 }
+
+CursesProvider::~CursesProvider() {
+    if (ctgMenu not_eq NULL) {
+        unpost_menu(ctgMenu);
+        free_menu(ctgMenu);
+
+        for (unsigned int i = 0; i < ARRAY_SIZE(ctgItems); ++i) {
+            free_item(ctgItems[i]);
+        }
+
+        unpost_menu(postsMenu);
+        free_menu(postsMenu);
+    }
+
+    if (postsItems not_eq NULL) {
+        for (unsigned int i = 0; i < ARRAY_SIZE(postsItems); ++i) {
+            free_item(postsItems[i]);
+        }
+    }
+
+    endwin();
+    feedly.curl_cleanup();
+}
+
 void CursesProvider::init() {
     Json::Value root;
     Json::Reader reader;
@@ -786,6 +810,7 @@ void CursesProvider::update_statusline(const char *update, const char *post,
     refresh();
     update_panels();
 }
+
 void CursesProvider::update_infoline(const char *info) {
     move(LINES - 1, 0);
     clrtoeol();
@@ -793,26 +818,4 @@ void CursesProvider::update_infoline(const char *info) {
     attron(COLOR_PAIR(5));
     mvprintw(LINES - 1, 0, info);
     attroff(COLOR_PAIR(5));
-}
-void CursesProvider::cleanup() {
-    if (ctgMenu not_eq NULL) {
-        unpost_menu(ctgMenu);
-        free_menu(ctgMenu);
-
-        for (unsigned int i = 0; i < ARRAY_SIZE(ctgItems); ++i) {
-            free_item(ctgItems[i]);
-        }
-
-        unpost_menu(postsMenu);
-        free_menu(postsMenu);
-    }
-
-    if (postsItems not_eq NULL) {
-        for (unsigned int i = 0; i < ARRAY_SIZE(postsItems); ++i) {
-            free_item(postsItems[i]);
-        }
-    }
-
-    endwin();
-    feedly.curl_cleanup();
 }
