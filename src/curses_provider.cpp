@@ -237,14 +237,10 @@ void CursesProvider::eventHandler() {
                 ctgMenuCallback(strdup(item_name(current_item(ctgMenu))));
                 break;
             case KEY_DOWN:
-                changeSelectedItem(curMenu, REQ_DOWN_ITEM);
-                break;
-            case KEY_UP:
-                changeSelectedItem(curMenu, REQ_UP_ITEM);
-                break;
             case 'j':
                 changeSelectedItem(curMenu, REQ_DOWN_ITEM);
                 break;
+            case KEY_UP:
             case 'k':
                 changeSelectedItem(curMenu, REQ_UP_ITEM);
                 break;
