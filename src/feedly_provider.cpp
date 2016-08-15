@@ -27,7 +27,7 @@ FeedlyProvider::FeedlyProvider() {
     curl_easy_setopt(curl, CURLOPT_WRITEDATA, data_holder);
 
     curl_res = curl_easy_perform(curl);
-    if (curl_res not_eq CURLE_OK) {
+    if (curl_res != CURLE_OK) {
         log_stream << "curl_easy_perform() failed : "
                    << curl_easy_strerror(curl_res) << std::endl;
         std::cerr << "ERROR: Could not connect to host. Possible Causes:\n"
@@ -127,7 +127,7 @@ const std::map<std::string, std::string>* FeedlyProvider::getLabels() {
     std::ifstream data(TEMP_PATH.c_str(), std::ifstream::binary);
     parsingSuccesful = reader.parse(data, root);
 
-    if (data.fail() || curl_res not_eq CURLE_OK || not parsingSuccesful ||
+    if (data.fail() || curl_res != CURLE_OK || not parsingSuccesful ||
         not root.isArray()) {
         if (not isLogStreamOpen) {
             openLogStream();
@@ -139,7 +139,7 @@ const std::map<std::string, std::string>* FeedlyProvider::getLabels() {
         } else {
             log_stream << root << std::endl;
         }
-        if (curl_res not_eq CURLE_OK) {
+        if (curl_res != CURLE_OK) {
             log_stream << "curl_easy_perform() failed : "
                        << curl_easy_strerror(curl_res) << std::endl;
         }
@@ -178,7 +178,7 @@ const std::map<std::string, unsigned int>* FeedlyProvider::getUnreadCount() {
     std::ifstream data(TEMP_PATH.c_str(), std::ifstream::binary);
     parsingSuccesful = reader.parse(data, root);
 
-    if (data.fail() || curl_res not_eq CURLE_OK || not parsingSuccesful) {
+    if (data.fail() || curl_res != CURLE_OK || not parsingSuccesful) {
         if (not isLogStreamOpen) {
             openLogStream();
         }
@@ -187,7 +187,7 @@ const std::map<std::string, unsigned int>* FeedlyProvider::getUnreadCount() {
             log_stream << "\nERROR: Failed to parse tokens file"
                        << reader.getFormattedErrorMessages() << std::endl;
         }
-        if (curl_res not_eq CURLE_OK) {
+        if (curl_res != CURLE_OK) {
             log_stream << "curl_easy_perform() failed : "
                        << curl_easy_strerror(curl_res) << std::endl;
         }
@@ -254,7 +254,7 @@ const std::vector<PostData>* FeedlyProvider::givePostsFromStream(
     std::ifstream data(TEMP_PATH.c_str(), std::ifstream::binary);
     parsingSuccesful = reader.parse(data, root);
 
-    if (data.fail() || curl_res not_eq CURLE_OK || not parsingSuccesful) {
+    if (data.fail() || curl_res != CURLE_OK || not parsingSuccesful) {
         if (not isLogStreamOpen) {
             openLogStream();
         }
@@ -262,7 +262,7 @@ const std::vector<PostData>* FeedlyProvider::givePostsFromStream(
             log_stream << "\nERROR: Failed to parse tokens file"
                        << reader.getFormattedErrorMessages() << std::endl;
         }
-        if (curl_res not_eq CURLE_OK) {
+        if (curl_res != CURLE_OK) {
             log_stream << "curl_easy_perform() failed : "
                        << curl_easy_strerror(curl_res) << std::endl;
         }
@@ -311,7 +311,7 @@ bool FeedlyProvider::markPostWithAction(const std::string& action,
 
     curl_post("markers", document);
 
-    if (curl_res not_eq CURLE_OK) {
+    if (curl_res != CURLE_OK) {
         if (not isLogStreamOpen) {
             openLogStream();
         }
@@ -341,7 +341,7 @@ bool FeedlyProvider::markCategoriesRead(const std::string& id,
 
     curl_post("markers", document);
 
-    if (curl_res not_eq CURLE_OK) {
+    if (curl_res != CURLE_OK) {
         if (not isLogStreamOpen) {
             openLogStream();
         }
@@ -376,7 +376,7 @@ bool FeedlyProvider::addSubscription(bool newCategory, const std::string& feed,
 
     curl_post("subscriptions", document);
 
-    if (curl_res not_eq CURLE_OK) {
+    if (curl_res != CURLE_OK) {
         if (not isLogStreamOpen) {
             openLogStream();
         }
@@ -415,7 +415,7 @@ void FeedlyProvider::curl_retrive(const std::string& uri) {
         }
         log_stream << "ERROR: Curl Request Failed\n HTTP Response Code: "
                    << response_code << std::endl;
-        if (curl_res not_eq CURLE_OK) {
+        if (curl_res != CURLE_OK) {
             log_stream << "curl_easy_perform() failed : "
                        << curl_easy_strerror(curl_res) << std::endl;
             std::cerr << "curl_easy_perform() failed : "

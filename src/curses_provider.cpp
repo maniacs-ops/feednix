@@ -54,7 +54,7 @@ CursesProvider::CursesProvider(bool verbose, bool change) {
 }
 
 CursesProvider::~CursesProvider() {
-    if (ctgMenu not_eq nullptr) {
+    if (ctgMenu != nullptr) {
         unpost_menu(ctgMenu);
         free_menu(ctgMenu);
 
@@ -66,7 +66,7 @@ CursesProvider::~CursesProvider() {
         free_menu(postsMenu);
     }
 
-    if (postsItems not_eq nullptr) {
+    if (postsItems != nullptr) {
         for (unsigned int i = 0; i < ARRAY_SIZE(postsItems); ++i) {
             free_item(postsItems[i]);
         }
@@ -269,8 +269,8 @@ void CursesProvider::eventHandler() {
                 break;
             }
             case 'r': {
-                if (postsMenu not_eq nullptr && curItem not_eq nullptr &&
-                    postsItems not_eq nullptr) {
+                if (postsMenu != nullptr && curItem != nullptr &&
+                    postsItems != nullptr) {
                     markItemRead(curItem);
                 }
                 break;
@@ -369,7 +369,7 @@ void CursesProvider::createCategoriesMenu() {
     // auto specifier instead
     // to make the code more readable.
     for (auto it = labels->begin(); it != labels->end(); ++it) {
-        if (it->first.compare("All") not_eq 0 &&
+        if (it->first.compare("All") != 0 &&
             it->first.compare("Saved") != 0) {
             ctgItems[i] = new_item((it->first).c_str(), "");
             i++;
@@ -404,7 +404,7 @@ void CursesProvider::createPostsMenu() {
     const std::vector<PostData> *posts =
         feedly.givePostsFromStream("All", currentRank);
 
-    if (posts not_eq nullptr && posts->size() > 0) {
+    if (posts != nullptr && posts->size() > 0) {
         int n_choices, i = 0;
         totalPosts = posts->size();
         numUnread = totalPosts;
@@ -528,7 +528,7 @@ void CursesProvider::changeSelectedItem(MENU *curMenu, int req) {
     menu_driver(curMenu, req);
     ITEM *curItem = current_item(curMenu);
 
-    if (curMenu not_eq postsMenu || not curItem) {
+    if (curMenu != postsMenu || not curItem) {
         return;
     }
 
@@ -554,7 +554,7 @@ void CursesProvider::changeSelectedItem(MENU *curMenu, int req) {
         if (stream) {
             char buffer[256];
             while (not feof(stream)) {
-                if (fgets(buffer, 256, stream) not_eq nullptr) {
+                if (fgets(buffer, 256, stream) != nullptr) {
                     content.append(buffer);
                 }
             }
@@ -573,7 +573,7 @@ void CursesProvider::changeSelectedItem(MENU *curMenu, int req) {
     }
 }
 void CursesProvider::postsMenuCallback(ITEM *item, bool preview) {
-    if (access("/usr/bin/w3m", X_OK) not_eq 0) {
+    if (access("/usr/bin/w3m", X_OK) != 0) {
         return;
     }
     PostData *container = feedly.getSinglePostData(item_index(item));
@@ -673,7 +673,7 @@ void CursesProvider::newFeedDialog() {
     update_statusline("[Adding subscription]", NULL, true);
     refresh();
 
-    if (strlen(feed) not_eq 0) {
+    if (strlen(feed) != 0) {
         feedly.addSubscription(false, feed, arrayTokens, title);
     }
 
@@ -721,10 +721,10 @@ void CursesProvider::print_in_middle(WINDOW *win, int starty, int startx,
         win = stdscr;
     }
     getyx(win, y, x);
-    if (startx not_eq 0) {
+    if (startx != 0) {
         x = startx;
     }
-    if (starty not_eq 0) {
+    if (starty != 0) {
         y = starty;
     }
     if (width == 0) {
@@ -749,10 +749,10 @@ void CursesProvider::print_in_center(WINDOW *win, int starty, int startx,
 
     getyx(win, y, x);
 
-    if (startx not_eq 0) {
+    if (startx != 0) {
         x = startx;
     }
-    if (starty not_eq 0) {
+    if (starty != 0) {
         y = starty;
     }
     if (width == 0) {
